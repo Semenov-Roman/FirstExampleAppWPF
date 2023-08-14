@@ -9,12 +9,93 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="FirstExampleAppWPF">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <Window.DataContext>
         <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    </Window.DataContext>
+    
+    <Window.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+    </Window.Styles>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+    <Grid ShowGridLines="True">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+    
+        <ListBox HorizontalAlignment="Stretch" ItemsSource="{Binding Persons}"
+                 SelectedItem="{Binding SelectedPerson}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <UniformGrid Columns="4">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Age, StringFormat=Лет: {0}}"/>
+                        <TextBlock Text="{Binding Address.Street, StringFormat=Ул: {0}}"/>
+                        <TextBlock Text="{Binding Address.Number}"/>
+                    </UniformGrid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        
+        <ItemsControl Grid.Column="1" ItemsSource="{Binding Persons}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <UniformGrid Columns="4">
+                        <TextBlock Text="{Binding Name}"/>
+                        <TextBlock Text="{Binding Age, StringFormat=Лет: {0}}"/>
+                        <TextBlock Text="{Binding Address.Street, StringFormat=Ул: {0}}"/>
+                        <TextBlock Text="{Binding Address.Number}"/>
+                    </UniformGrid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <ItemsControl 
+            Grid.Column="2"
+            HorizontalAlignment="Stretch"
+            ItemsSource="{Binding Persons}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Expander>
+                        <Expander.Header>
+                            <UniformGrid Columns="2">
+                                 
+                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Age, StringFormat=Лет: {0}}"/>
+                                    
+                            </UniformGrid>
+                        </Expander.Header>
+                        <!--<Expander.HeaderTemplate>
+                            <DataTemplate>
+                                <UniformGrid 
+                                    Columns="2"
+                                    DataContext="{Binding RelativeSource={RelativeSource AncestorType= Expander,Mode= FindAncestor}, Path=DataContext}">
+                                    
+                                    <TextBlock Text="{Binding $parent[UniformGrid].DataContext.Name}"/>
+                                    <TextBlock Text="{Binding Age, StringFormat=Лет: {0}}"/>
+                                    
+                                </UniformGrid>
+                            </DataTemplate>
+                        </Expander.HeaderTemplate>-->
+                        
+                        <UniformGrid Columns="2">
+                            <TextBlock Text="{Binding Address.Street, StringFormat=Ул: {0}}"/>
+                            <TextBlock Text="{Binding Address.Number}"/>
+                        </UniformGrid>
+                        
+                    </Expander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        
+    </Grid>
 </Window>
